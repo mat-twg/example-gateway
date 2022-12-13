@@ -1,0 +1,31 @@
+version: "3.9"
+services:
+    mongo:
+        image: mongo
+        restart: always
+        volumes:
+            - ./data/db:/data/db
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+            MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+        networks:
+            default:
+                ipv4_address: ${MONGO_IP}
+volumes:
+    mongodata:
+    node_modules:
+        driver: local
+        driver_opts:
+            type: none
+            o: bind
+            device: ./node_modules
+
+networks:
+    default:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+                -
+                    subnet: ${MONGO_SUBNET}
+                    gateway: ${MONGO_GATEWAY}
