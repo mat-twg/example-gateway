@@ -4,6 +4,7 @@ import { BusinessModule } from './business/business.module';
 import { WebsocketModule } from './gateway/websocket.module';
 import { EntityModule } from './entity/entity.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import * as process from 'process';
 
 @Module({
   imports: [
@@ -11,7 +12,7 @@ import { MongooseModule } from '@nestjs/mongoose';
       envFilePath: ['.env.local', '.env'],
       isGlobal: true,
     }),
-    MongooseModule.forRoot('mongodb://root:password@172.16.101.2'),
+    MongooseModule.forRoot(process.env.MONGO_URI),
     WebsocketModule,
     BusinessModule,
     EntityModule,
