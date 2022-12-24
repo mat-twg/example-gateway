@@ -20,6 +20,10 @@ export class EntityService {
   }
 
   async findAll(): Promise<Entity[]> {
-    return this.entityModel.find().exec();
+    return this.entityModel
+      .find()
+      .sort({ name: 1 })
+      .collation({ locale: 'en_US', numericOrdering: true })
+      .exec();
   }
 }
