@@ -1,19 +1,36 @@
-import { Controller, Get } from '@nestjs/common';
-import { EntityDto } from './entity.dto';
+import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
 import { EntityService } from './entity.service';
 import { Entity } from './entity.schema';
+import {
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
-@Controller('/entity')
+@ApiTags('Entity')
+@Controller('entity')
 export class EntityController {
   constructor(private readonly entityService: EntityService) {}
 
-  @Get('/list')
+  @ApiResponse({
+    status: 200,
+    type: Entity,
+    isArray: true,
+  })
+  @Get('list')
   async getEntityList(): Promise<Entity[]> {
-    return await this.entityService.findAll();
+    return this.entityService.findAll();
   }
 
-  @Get('/:id')
-  getEntity(): EntityDto {
-    return new EntityDto();
+  @ApiOkResponse({ type: Entity })
+  @ApiNotFoundResponse()
+  @Get(':name')
+  async getEntity(@Param('name') name: string): Promise<Entity> {
+    const entity = await this.entityService.findByName(name);
+    if (!entity) {
+      throw new NotFoundException();
+    }
+    return entity;
   }
 }

@@ -3,10 +3,19 @@ import { AppModule } from './app.module';
 import { Logger } from '@nestjs/common';
 import { clc } from '@nestjs/common/utils/cli-colors.util';
 import { ZmqSubServer } from './zmq';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const port = process.env.API_PORT || 3000;
+
+  const config = new DocumentBuilder()
+    .setTitle('Example API')
+    .setDescription('Description')
+    .setVersion('1.0')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('/', app, document);
 
   app.connectMicroservice({
     strategy: new ZmqSubServer({

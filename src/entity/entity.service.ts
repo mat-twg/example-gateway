@@ -19,6 +19,12 @@ export class EntityService {
     return model || new this.entityModel(entityDto).save();
   }
 
+  async findByName(name: string): Promise<Entity> {
+    return this.entityModel
+      .findOne({ name: new RegExp(`^${name}$`, 'i') })
+      .exec();
+  }
+
   async findAll(): Promise<Entity[]> {
     return this.entityModel
       .find()

@@ -8,9 +8,6 @@ services:
         environment:
             MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
             MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
-        networks:
-            default:
-                ipv4_address: ${MONGO_IP}
 volumes:
     mongodata:
     node_modules:
